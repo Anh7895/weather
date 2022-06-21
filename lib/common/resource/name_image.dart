@@ -5,6 +5,7 @@ const png_ic_logo = "assets/images/png/chargenow_logo.png";
 const png_ic_logo_horizontal = "assets/icons/png/ic_logo_horizontal.png";
 const png_search_maps= "assets/images/png/search_maps.png";
 const png_ic_apple= "assets/icons/png/ic_apple.png";
+const img_backgound= "assets/images/png/backgound.png";
 
 
 ///TODO: image svg
@@ -21,6 +22,10 @@ const ic_phone = "assets/icons/svg/ic_phone.svg";
 const ic_location = "assets/icons/svg/ic_location.svg";
 const ic_check_mark = "assets/icons/svg/ic_check_mark.svg";
 const ic_error = "assets/icons/svg/ic_error.svg";
+
+const ic_add = "assets/icons/svg/ic_add.svg";
+const ic_left = "assets/icons/svg/ic_left.svg";
+const ic_right = "assets/icons/svg/ic_right.svg";
 
 
 

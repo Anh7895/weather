@@ -140,6 +140,8 @@ class ThemeColor {
   static const clr_DCE5DD = Color(0xFFDCE5DD);
   static const clr_767680_12 = Color(0x1F767680);
   static const clr_A08C8C = Color(0xFFA08C8C);
+  static const clr_7582F4 = Color(0xFF7582F4);
+  static const clr_262C51 = Color(0xFF262C51);
 
   static const MaterialColor appStyleColor = const MaterialColor(0xFFF04D5E,
       const {

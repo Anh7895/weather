@@ -2,16 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:weather/bloc/home/home_bloc.dart';
+import 'package:weather/common/resource/name_image.dart';
+import 'package:weather/common/resource/sizes.dart';
 import 'package:weather/common/resource/theme_color.dart';
 import 'package:weather/common/widgets/http_stream_handler.dart';
 import 'package:weather/common/widgets/images/local_image_widget.dart';
+import 'package:weather/common/widgets/images/svg_image_widget.dart';
 
 import '../../bloc/base_state/base_state.dart';
 import '../../common/injector/injector.dart';
-import '../../common/resource/name_image.dart';
-import '../../common/widgets/images/svg_image_widget.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -57,23 +58,89 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Scaffold(
                 backgroundColor: ThemeColor.clr_F8F1F2,
                 resizeToAvoidBottomInset: false,
-                body: Container(
-                  child: Center(
-                    child: Text('Welcome'),
-                  ),
-                ),
-                bottomNavigationBar: Transform(
-                  alignment: FractionalOffset.center,
-                  transform: new Matrix4.identity()
-                    ..rotateZ(180 * 3.1415927 / 180),
-                  child: ClipPath(
-                    clipper: ArcClipper(),
-                    child: Container(
-                      height: 120,
-                      color: Colors.blue,
-                      child: Center(child: Text("OvalBottomBorderClipper()")),
+                body: Stack(
+                  children: [
+                    LocalImageWidget(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      url: img_backgound,
                     ),
-                  ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        height: 90,
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: ClipPath(
+                                clipper: ArcClipper(),
+                                child: Container(
+                                  height: 65,
+                                  color: ThemeColor.clr_262C51.withOpacity(0.5),
+                                  padding: EdgeInsets.symmetric(horizontal: width_20),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: (){
+                                          print('left');
+                                        },
+                                        child: SVGImageWidget(
+                                          url: ic_left,
+                                          width: width_35,
+                                          height: width_35,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: (){
+                                          print('right');
+                                        },
+                                        child: SVGImageWidget(
+                                          url: ic_right,
+                                          width: width_35,
+                                          height: width_35,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: ClipPath(
+                                  clipper: RPSCustomPainter(),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: ThemeColor.clr_262C51.withOpacity(0.7),
+                                    height: 90,
+                                    width: MediaQuery.of(context).size.width /1.2,
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        print('click');
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(500),
+                                        ),
+                                        child: SVGImageWidget(
+                                          url: ic_add,
+                                          width: width_50,
+                                          height: width_50,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ));
         },
@@ -82,22 +149,45 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 }
-class CurvePainter extends CustomPainter {
+class ArcClipper extends CustomClipper<Path> {
   @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 8.0;
-
-    final path = Path();
-    path.moveTo(0, size.height / 2);
-    path.quadraticBezierTo(size.width / 2, size.height, size.width, size.height / 2);
-    canvas.drawPath(path, paint);
+  Path getClip(Size size) {
+    Path path_0 = Path();
+    path_0.moveTo(0,size.height*0.01123596);
+    path_0.cubicTo(0,size.height*0.01123596,size.width*0.1950690,size.height*0.1908112,size.width*0.3256410,size.height*0.2359551);
+    path_0.cubicTo(size.width*0.3931769,size.height*0.2593056,size.width*0.4321897,size.height*0.2696629,size.width*0.5000000,size.height*0.2696629);
+    path_0.cubicTo(size.width*0.5678103,size.height*0.2696629,size.width*0.6042590,size.height*0.2593056,size.width*0.6717949,size.height*0.2359551);
+    path_0.cubicTo(size.width*0.8023667,size.height*0.1908112,size.width,size.height*0.01123596,size.width,size.height*0.01123596);
+    path_0.lineTo(size.width,size.height);
+    path_0.lineTo(0,size.height);
+    path_0.lineTo(0,size.height*0.01123596);
+    path_0.close();
+    return path_0;
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+  bool shouldReclip(CustomClipper old) {
+    return old != this;
+  }
+}
+class RPSCustomPainter extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path_0 = Path();
+    path_0.moveTo(size.width*0.4210526,0);
+    path_0.lineTo(size.width*0.5789474,0);
+    path_0.cubicTo(size.width*0.6992481,0,size.width*0.7349662,size.height*0.2413980,size.width*0.7734286,size.height*0.4869850);
+    path_0.cubicTo(size.width*0.8132519,size.height*0.7412470,size.width*0.8533835,size.height,size.width*0.9849624,size.height);
+    path_0.lineTo(size.width*0.01503782,size.height);
+    path_0.cubicTo(size.width*0.1466169,size.height,size.width*0.1867496,size.height*0.7412470,size.width*0.2265707,size.height*0.4869850);
+    path_0.cubicTo(size.width*0.2650335,size.height*0.2413980,size.width*0.3007523,0,size.width*0.4210526,0);
+    path_0.close();
+    return path_0;
+
+  }
+
+  @override
+  bool shouldReclip(CustomClipper old) {
+    return old != this;
   }
 }
