@@ -1,92 +1,179 @@
-# Weather App
+# weather
+cd
+
+//# Tài liệu hướng dẫn
 
 
+* [Cấu trúc thư mục](#part1)
 
-## Getting started
+* [Run project](#part2)
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+* [Các công nghệ và pattern được sử dụng](#part3)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+* [Common widget thường sử dụng](#part4)
 
-## Add your files
+## Role Branch
+* Tạo branch feature theo cấu trúc: 'feature/your_name/your_feature'
+* Tạo branch fix bug theo cấu trúc: 'fix/your_name/fix...'
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## Các quy tắc cần lưu ý
 
+* Tên lớp, enum đặt theo PascalCase, ví dụ: UserClass, CategoryClass, ..
+* Tên hàm và phương thức sử dụng camelCase, ví dụ getUser, getCategory…
+* Tên biến cũng sử dụng camelCase loginUser,loginUser,categoryList…
+* Tên hằng số thì đặc biệt, viết hoa hết và cách nhau bởi dấu gạch dưới DISCOUNT_PERCENT, LIMIT_RATE…
+* Tên các file đặt theo kiểu underscore ví dụ: user_screen.dart, ...
+
+* Trong thư mục ui sẽ tạo các directory tương ứng với screen trong đó sẽ có màn hình chính và các widget component.
+
+* Nên tách các component ui trong một màn hình.
+  Ví dụ: Danh sách Category sẽ tách item category sang widget khác.
+  Các widget component có thể tạo ngay trong thư mục chứa màn hình đó hoặc tách riêng vào thư mục widget trong common. Tùy vào mức độ tái sử dụng của component.
+  Mục đích: Dễ tìm, gọn code, dễ xử lý, có thể tái sử dụng ở nhiều ui khác nhau, ...
+
+
+## <a name="part1"></a> Cấu trúc thư mục
+*  `blocs` : Thư mục BLoC của từng màn hình, trong mỗi bloc folder bao gồm 3 class : Bloc, Event, State
+*  `datasource` : Thư mục quản lý model, network và repository
+*  `common` : Thư mục quản lý widget common, validator widget, constant value
+*  `ui` : Thư mục quản lý UI
+* `app.dart` : Thay đổi màn hình khởi tạo ở `initialRoute:Routes.targetRouteName`
+
+
+## <a name="part2"></a> Run Project
+Requirement tools:
+* flutter version 2.5.3
+* dart version 2.14.4
+
+* Step by step : Flutter clean -> Flutter pub get -> Flutter run
+
+## <a name="part3"></a> Các công nghệ và pattern được sử dụng
+
+### **BLoC** (Bussiness Logic Component):
+
+<div align="center">
+   <p style="margin-top: 48; margin-bottom: 48;">
+      <img width="800" style="vertical-align: middle;" src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png"/>
+   </p>
+</div>
+
+
+BLoC là một pattern được khuyên dùng bởi Google khi làm việc với Flutter, về cơ bản BLoC là một thành phần chứa logic nghiệp vụ của chương trình, nhận dữ liệu đầu vào `X`, xử lý nghiệp vụ và trả về `Y`.
+
+Ví dụ: ứng dụng cần gọi rest API để lấy về thông tin tài khoản cho người dùng, giả sử người dùng có `userId = X`, và dữ liệu mong muốn là thông tin tài khoản `Y`, BLoC sẽ được xây dựng để thực hiện một `HttpRequest` lên server với tham số `X`, dữ liệu trả về được xử lý và đóng gói thành dữ liệu dạng `Y`.
+
+BLoC được xây dựng dựa trên 2 khái niệm cơ bản của Dart và Flutter là `Stream` và `InheritedWidget`. `Stream` được sử dụng để giúp BLoC tương tác với các thành phần khác, nhận và trả về dữ liệu. Trong Flutter, các thành phần của một ứng dụng tồn tại trong các `Widget`, BLoC cũng tương tự. BLoC được bao bọc trong một `InheritedWidget` và nhờ đặc tính của `Widget` này, các thành phần khác trong ứng dụng có thể truy xuất được đối tượng BLoC này.
+
+Nhờ việc chia tách logic nghiệp vụ khỏi các đối tượng UI, sử dụng BLoC giúp việc tái sử dụng code và unit test trở nên dễ dàng hơn.
+
+*** State management được triển khai theo mô hình của packages  flutter_bloc ***
+
+### **flutter_bloc** (https://pub.dev/packages/flutter_bloc):
+Thư viện giúp dễ dàng triển khai pattern BLoC
+
+### **kiwi** https://pub.dev/packages/kiwi):
+Thư viện giúp cho việc triển khai DI
+- command  generator kiwi:
+  `flutter packages pub run build_runner build --delete-conflicting-outputs`
+
+Folder lib/common/injector
+
+Mỗi lần tạo thêm một bloc mới, repository mới, remotedata source mới, cần khai báo thêm trong injector_config class
+VD :
+@Register.factory(NewBloc)
+void _configureBlocs();
+
+@Register.factory(NewRepository)
+void _configureRepositories();
+
+@Register.factory(NewDataSource)
+void _configureDataSources();
+
+sau đó run `flutter packages pub run build_runner build --delete-conflicting-outputs` để generate lại data
+
+
+Tham khảo:
+
+[State Management in Flutter](https://blog.geekyants.com/state-management-in-flutter-7df833e6f3bd)
+
+[Reactive Programming - Streams - BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc/)
+
+[Triển khai flutter_bloc package](https://www.miquido.com/blog/flutter-architecture-provider-vs-bloc/)
+
+[flutter_bloc package](https://pub.dev/packages/flutter_bloc)
+
+[kiwi package](https://pub.dev/packages/kiwi)
+
+### **Swagger Generate** (Sử dụng cho BE viết swagger):
+- Swagger generate code api, tạo các file api, model,...
+
+Mỗi lần swagger update, client cần generate lại file api.
+- `cd api`
+- Với macos `openapi-generator generate -i 'url swagger json' -g dart-dio-next`
+- Với windown `openapi-generator generate -cli 'url swagger json' -g dart-dio-next`
+- `flutter packages pub run build_runner build --delete-conflicting-outputs`
+
+Ex:
+Url swagger json:  `https://petstore.swagger.io/v2/swagger.json`
+
+
+## <a name="part4"></a> Common widget thường sử dụng
+### **BaseScreen**
+- Widget cung cấp giao diện mặc định có appbar, khả năng show/hide loading khi giao tiếp network (để show/hide loading, luôn xây dựng widget HttpStreamHandler nằm trong body của BaseScreen)
+
+```dart
+BaseScreen(
+      overrideBack: (context) {
+        if (_currentPage > 0) {
+          setState(() {
+            _currentPage -= 1;
+            _pageController.animateToPage(_currentPage,
+                duration: Duration(milliseconds: 240), curve: Curves.easeIn);
+          });
+        }
+      },
+      backgroundColor: _backgroundColor,
+      isShowAppBar: true,
+      appBar: buildAppBarShowPartner(context),
+      title: 'Voucher Screen',
+      body: HttpStreamHandler<VoucherBloc, BaseState>(
+        bloc: _bloc,
+        listener: (context, state) async {
+        },
+        builder: (context, state) {
+          return _buildScreens(context);
+        },
+      ),
+    );
 ```
-cd existing_repo
-git remote add origin https://git.toprate.io/toprate-intern/weather-app.git
-git branch -M main
-git push -uf origin main
+### **HttpStreamHandler**
+- Widget xây dựng dựa trên widget BlocConsumer của package flutter_bloc, handle response success/ error, show alert cảnh báo chung khi call api thất bại
+- Chú ý : không dùng setState trong builder(){}, chỉ được dùng setstate trong listener(){}
+```dart
+HttpStreamHandler<VoucherBloc, BaseState>(
+        bloc: _bloc,
+        listener: (context, state) async {
+          if (state is CheckVoucherCodeSuccessState) {
+            _response = state.response.result;
+            _pageController.animateToPage(1,
+                duration: Duration(milliseconds: 240), curve: Curves.easeIn);
+          } else if (state is ConsumeCodeSuccessState) {
+            showAlert(context, 'Successfully',
+                'You have just consumed code successfully',
+                dismissible: false, canPop: false, onDismiss: (_) {
+              _pageController.animateToPage(0,
+                  duration: Duration(milliseconds: 240), curve: Curves.easeIn);
+            });
+          } else if (state is UpdateBackgroundColorSuccessState) {
+            if (state.isChangeColor) {
+              _backgroundColor = ThemeColor.voucherBackgroundColor;
+            } else {
+              _backgroundColor = Colors.transparent;
+            }
+          }
+        },
+        builder: (context, state) {
+          return _buildScreens(context);
+        },
+      )
 ```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://git.toprate.io/toprate-intern/weather-app/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
