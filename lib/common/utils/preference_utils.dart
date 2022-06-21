@@ -1,9 +1,6 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:weather/datasource/data/model/response/business_detail_model.dart';
-import 'package:weather/datasource/data/model/response/login_response.dart';
-import 'package:weather/datasource/data/model/response/user_model.dart';
 
 class PreferenceUtils {
   static Future<SharedPreferences> get _instance async =>
@@ -44,33 +41,33 @@ class PreferenceUtils {
 
 
 
-  static Future<bool> saveUserLogin(BusinessDetailModel? userModel) async {
-    var prefs = await _instance;
-    try {
-      await prefs.setString(
-        "user",
-        jsonEncode(userModel?.toJson()),
-      );
-      return true;
-    } catch (e) {
-      print(e);
-      return false;
-    }
-  }
+  // static Future<bool> saveUserLogin(BusinessDetailModel? userModel) async {
+  //   var prefs = await _instance;
+  //   try {
+  //     await prefs.setString(
+  //       "user",
+  //       jsonEncode(userModel?.toJson()),
+  //     );
+  //     return true;
+  //   } catch (e) {
+  //     print(e);
+  //     return false;
+  //   }
+  // }
 
-  static Future<BusinessDetailModel> getUser() async {
-    var prefs = await _instance;
-    try {
-      String? userPrefs = prefs.getString("user");
-      if (userPrefs == null || userPrefs.isEmpty) return BusinessDetailModel();
-      BusinessDetailModel userModel =
-      BusinessDetailModel.fromJson(jsonDecode(userPrefs));
-      return userModel;
-    } catch (e) {
-      print(e);
-      return BusinessDetailModel();
-    }
-  }
+  // static Future<BusinessDetailModel> getUser() async {
+  //   var prefs = await _instance;
+  //   try {
+  //     String? userPrefs = prefs.getString("user");
+  //     if (userPrefs == null || userPrefs.isEmpty) return BusinessDetailModel();
+  //     BusinessDetailModel userModel =
+  //     BusinessDetailModel.fromJson(jsonDecode(userPrefs));
+  //     return userModel;
+  //   } catch (e) {
+  //     print(e);
+  //     return BusinessDetailModel();
+  //   }
+  // }
 
   Future<int> deleteUsers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

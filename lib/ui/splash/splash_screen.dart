@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future getStation() async {
-    await LocalUserData.getInstance.getPersonal();
+    // await LocalUserData.getInstance.getPersonal();
     await LocalUserData.getInstance.getSearchContent();
   }
 

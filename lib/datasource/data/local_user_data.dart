@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:weather/common/utils/preference_utils.dart';
-import 'package:weather/datasource/data/model/entity/service_model.dart';
 import 'package:flutter/material.dart';
 
-import 'model/response/personal/personal_model.dart';
 
 class LocalUserData {
   static final LocalUserData _singleton = LocalUserData._internal();
@@ -23,7 +21,6 @@ class LocalUserData {
   String? chat_id = '';
   String? chat_token = '';
   int? user_id ;
-  PersonalModel personalModel = PersonalModel();
   String? refreshToken;
   String? defaultLanguage = /*"En"*/ "vi";
   bool isFavorite = false;
@@ -68,38 +65,38 @@ class LocalUserData {
   ///Handle save station to storage
 
   ///Handle save personal to storage
-  Future savePersonal(PersonalModel personalModel) async {
-
-
-    try {
-      PreferenceUtils.removeValue(key: 'personal');
-      await PreferenceUtils.setString("personal", jsonEncode(personalModel));
-      return true;
-    } catch (e) {
-      print(e);
-      return false;
-    }
-  }
-
-  ///Handle get station to storage
+  // Future savePersonal(PersonalModel personalModel) async {
+  //
+  //
+  //   try {
+  //     PreferenceUtils.removeValue(key: 'personal');
+  //     await PreferenceUtils.setString("personal", jsonEncode(personalModel));
+  //     return true;
+  //   } catch (e) {
+  //     print(e);
+  //     return false;
+  //   }
+  // }
 
   ///Handle get station to storage
-  Future<PersonalModel> getPersonal() async {
-    try {
-      String userPrefs = await PreferenceUtils.getString("personal");
-      if (userPrefs == null || userPrefs.isEmpty) return PersonalModel();
-      dynamic personal = jsonDecode(userPrefs);
-      personalModel = PersonalModel.fromJson(personal);
-      chat_id = personalModel.chat_id;
-      chat_token = personalModel.chatToken?.token;
-      print("Chat ${chat_token}");
-      print("Chat ${chat_id}");
-      return personalModel;
-    } catch (e) {
-      print("errget $e");
-      return PersonalModel();
-    }
-  }
+
+  ///Handle get station to storage
+  // Future<PersonalModel> getPersonal() async {
+  //   try {
+  //     String userPrefs = await PreferenceUtils.getString("personal");
+  //     if (userPrefs == null || userPrefs.isEmpty) return PersonalModel();
+  //     dynamic personal = jsonDecode(userPrefs);
+  //     personalModel = PersonalModel.fromJson(personal);
+  //     chat_id = personalModel.chat_id;
+  //     chat_token = personalModel.chatToken?.token;
+  //     print("Chat ${chat_token}");
+  //     print("Chat ${chat_id}");
+  //     return personalModel;
+  //   } catch (e) {
+  //     print("errget $e");
+  //     return PersonalModel();
+  //   }
+  // }
 
   Future saveSearchContent() async {
     try {

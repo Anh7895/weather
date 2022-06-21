@@ -130,18 +130,10 @@ class ThemeColor {
   static const clr_136849 = Color(0xFF136849);
   static const clr_appBarColor = Color(0xFFEF4C5E);
   static const clr_EF4C5E = Color(0xFFEF4C5E);
-  static const clr_02B609 = Color(0xFF02B609);
-  static const clr_FFDAD4 = Color(0xFFFFDAD4);
-  static const clr_DADADA = Color(0xFFDADADA);
-  static const clr_FFEAEA = Color(0xFFFFEAEA);
-  static const clr_white20 = Color(0x33FFFFFF);
-  static const clr_191C1A = Color(0xFF191C1A);
-  static const clr_EDEDED = Color(0xFFEDEDED);
-  static const clr_DCE5DD = Color(0xFFDCE5DD);
-  static const clr_767680_12 = Color(0x1F767680);
-  static const clr_A08C8C = Color(0xFFA08C8C);
   static const clr_7582F4 = Color(0xFF7582F4);
   static const clr_262C51 = Color(0xFF262C51);
+  static const clr_2E335A = Color(0xFF2E335A);
+  static const clr_48319D = Color(0xFF48319D);
 
   static const MaterialColor appStyleColor = const MaterialColor(0xFFF04D5E,
       const {

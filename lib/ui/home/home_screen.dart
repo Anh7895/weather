@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:weather/bloc/home/home_bloc.dart';
@@ -28,22 +26,24 @@ class _HomeScreenState extends State<HomeScreen> {
   double height = 0;
   @override
   void initState() {
-
     super.initState();
+
   }
+
 
   @override
   void dispose() {
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-
     _bloc.close();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+
 
     return Scaffold(
       body: HttpStreamHandler<HomeBloc, BaseState>(
@@ -65,82 +65,107 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: MediaQuery.of(context).size.height,
                       url: img_backgound,
                     ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SizedBox(
-                        height: 90,
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: ClipPath(
-                                clipper: ArcClipper(),
-                                child: Container(
-                                  height: 65,
-                                  color: ThemeColor.clr_262C51.withOpacity(0.5),
-                                  padding: EdgeInsets.symmetric(horizontal: width_20),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                  ],
+                ),
+                bottomSheet: Container(
+                  color: ThemeColor.clr_2E335A.withOpacity(0.9),
+                  height: 300,
+                  child: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(children: [
+                          SizedBox(
+                            height:100,
+                            child: ListView.builder(
+                              itemCount: 30,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index){
+                                return Card(
+                                  child: Wrap(
+                                    direction: Axis.vertical,
                                     children: [
-                                      GestureDetector(
-                                        onTap: (){
-                                          print('left');
-                                        },
-                                        child: SVGImageWidget(
-                                          url: ic_left,
-                                          width: width_35,
-                                          height: width_35,
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: (){
-                                          print('right');
-                                        },
-                                        child: SVGImageWidget(
-                                          url: ic_right,
-                                          width: width_35,
-                                          height: width_35,
-                                        ),
-                                      )
+                                      Text('3 AM'),
+                                      SizedBox(height: 10,),
+                                      Text('19 *'),
                                     ],
                                   ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],),
+                      ),
+                      Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: ClipPath(
+                              clipper: ArcClipper(),
+                              child: Container(
+                                height: 65,
+                                color: ThemeColor.clr_262C51.withOpacity(0.5),
+                                padding: EdgeInsets.symmetric(horizontal: width_20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: (){
+                                        print('left');
+                                      },
+                                      child: SVGImageWidget(
+                                        url: ic_left,
+                                        width: width_35,
+                                        height: width_35,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: (){
+                                        print('right');
+                                      },
+                                      child: SVGImageWidget(
+                                        url: ic_right,
+                                        width: width_35,
+                                        height: width_35,
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: ClipPath(
-                                  clipper: RPSCustomPainter(),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    color: ThemeColor.clr_262C51.withOpacity(0.7),
-                                    height: 90,
-                                    width: MediaQuery.of(context).size.width /1.2,
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        print('click');
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(500),
-                                        ),
-                                        child: SVGImageWidget(
-                                          url: ic_add,
-                                          width: width_50,
-                                          height: width_50,
-                                        ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: ClipPath(
+                                clipper: RPSCustomPainter(),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  color: ThemeColor.clr_262C51.withOpacity(0.7),
+                                  height: 90,
+                                  width: MediaQuery.of(context).size.width /1.2,
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      print('click');
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(500),
+                                      ),
+                                      child: SVGImageWidget(
+                                        url: ic_add,
+                                        width: width_50,
+                                        height: width_50,
                                       ),
                                     ),
-                                  )
-                              ),
+                                  ),
+                                )
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ));
         },
