@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:weather/bloc/home/home_bloc.dart';
 import 'package:weather/common/resource/name_image.dart';
 import 'package:weather/common/resource/sizes.dart';
+import 'package:weather/common/resource/text_style.dart';
 import 'package:weather/common/resource/theme_color.dart';
 import 'package:weather/common/widgets/http_stream_handler.dart';
 import 'package:weather/common/widgets/images/local_image_widget.dart';
@@ -21,12 +22,136 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final HomeBloc _bloc = Injector.resolve<HomeBloc>();
-
-  double width = 0;
-  double height = 0;
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      showModalBottomSheet(
+          isDismissible: false,
+          enableDrag: false,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(35.0),
+            ),
+          ),
+          backgroundColor: ThemeColor.clr_2E335A.withOpacity(0.9),
+          context: context, builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height /2.5,
+          padding: EdgeInsets.only(bottom: height_15,top: height_35),
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 4.8,
+                    child: ListView.builder(
+                      itemCount: 30,
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.only(left: width_15),
+                      itemBuilder: (context, index){
+                        return Container(
+                          padding: EdgeInsets.symmetric(vertical: height_20,horizontal: height_15),
+                          margin: EdgeInsets.only(right: width_10),
+                          decoration: BoxDecoration(
+                            color: ThemeColor.clr_48319D.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(radius_24),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text('3 AM',style: TextStyleCommon.textStyleCaption1(context),),
+                              SizedBox(height: 10),
+                              LocalImageWidget(
+                                url: img_cloud_rain,
+                                width: width_28,
+                                height: width_28,
+                              ),
+                              SizedBox(height: 10),
+                              Text('19 *',style: TextStyleCommon.textStyleCaption1(context)),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],),
+              ),
+              Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ClipPath(
+                      clipper: ArcClipper(),
+                      child: Container(
+                        height: 65,
+                        color: ThemeColor.clr_262C51.withOpacity(0.5),
+                        padding: EdgeInsets.symmetric(horizontal: width_20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: (){
+                                print('left');
+                              },
+                              child: SVGImageWidget(
+                                url: ic_left,
+                                width: width_35,
+                                height: width_35,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                print('right');
+                              },
+                              child: SVGImageWidget(
+                                url: ic_right,
+                                width: width_35,
+                                height: width_35,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ClipPath(
+                        clipper: RPSCustomPainter(),
+                        child: Container(
+                          alignment: Alignment.center,
+                          color: ThemeColor.clr_262C51.withOpacity(0.7),
+                          height: 90,
+                          width: MediaQuery.of(context).size.width /1.2,
+                          child: GestureDetector(
+                            onTap: (){
+                              print('click');
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(500),
+                              ),
+                              child: SVGImageWidget(
+                                url: ic_add,
+                                width: width_50,
+                                height: width_50,
+                              ),
+                            ),
+                          ),
+                        )
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      });
+    });
 
   }
 
@@ -41,10 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
-
-
+    double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return Scaffold(
       body: HttpStreamHandler<HomeBloc, BaseState>(
         bloc: _bloc,
@@ -61,111 +184,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 body: Stack(
                   children: [
                     LocalImageWidget(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
+                      width: w,
+                      height: h,
                       url: img_backgound,
                     ),
-                  ],
-                ),
-                bottomSheet: Container(
-                  color: ThemeColor.clr_2E335A.withOpacity(0.9),
-                  height: 300,
-                  child: Stack(
-                    children: [
-                      SingleChildScrollView(
-                        child: Column(children: [
-                          SizedBox(
-                            height:100,
-                            child: ListView.builder(
-                              itemCount: 30,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index){
-                                return Card(
-                                  child: Wrap(
-                                    direction: Axis.vertical,
-                                    children: [
-                                      Text('3 AM'),
-                                      SizedBox(height: 10,),
-                                      Text('19 *'),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],),
-                      ),
-                      Stack(
+                    SizedBox(
+                      width: w,
+                      height: h,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: ClipPath(
-                              clipper: ArcClipper(),
-                              child: Container(
-                                height: 65,
-                                color: ThemeColor.clr_262C51.withOpacity(0.5),
-                                padding: EdgeInsets.symmetric(horizontal: width_20),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: (){
-                                        print('left');
-                                      },
-                                      child: SVGImageWidget(
-                                        url: ic_left,
-                                        width: width_35,
-                                        height: width_35,
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: (){
-                                        print('right');
-                                      },
-                                      child: SVGImageWidget(
-                                        url: ic_right,
-                                        width: width_35,
-                                        height: width_35,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: ClipPath(
-                                clipper: RPSCustomPainter(),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  color: ThemeColor.clr_262C51.withOpacity(0.7),
-                                  height: 90,
-                                  width: MediaQuery.of(context).size.width /1.2,
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      print('click');
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(500),
-                                      ),
-                                      child: SVGImageWidget(
-                                        url: ic_add,
-                                        width: width_50,
-                                        height: width_50,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                          Text('Montreal',style: TextStyleCommon.textStyleCaption3(context),),
+                          Text('40°',style: TextStyleCommon.textStyleCaption4(context),),
+                          Text('Mostly Clear',style: TextStyleCommon.textStyleOpacity(context),),
+                          Text('H:24° L:18°',style: TextStyleCommon.textStyleCaption1(context),),
+                          LocalImageWidget(
+                            url: img_house,
+                            width: w /1.3,
+                            height: w /1.3,
+                          )
+
+                      ],),
+                    )
+                  ],
                 ),
               ));
         },

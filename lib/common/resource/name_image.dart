@@ -7,6 +7,14 @@ const png_search_maps= "assets/images/png/search_maps.png";
 const png_ic_apple= "assets/icons/png/ic_apple.png";
 const img_backgound= "assets/images/png/backgound.png";
 
+const img_angled_rain= "assets/icons/png/ic_angled_rain.png";
+const img_cloud_rain= "assets/icons/png/ic_cloud_rain.png";
+const img_fast_wind= "assets/icons/png/ic_fast_wind.png";
+const img_mid_rain= "assets/icons/png/ic_mid_rain.png";
+const img_tornado= "assets/icons/png/ic_tornado.png";
+
+
+
 
 ///TODO: image svg
 const svg_ic_splash = "assets/icons/svg/splash.svg";
@@ -26,6 +34,8 @@ const ic_error = "assets/icons/svg/ic_error.svg";
 const ic_add = "assets/icons/svg/ic_add.svg";
 const ic_left = "assets/icons/svg/ic_left.svg";
 const ic_right = "assets/icons/svg/ic_right.svg";
+
+const img_house = "assets/images/png/img_house.png";
 
 
 
