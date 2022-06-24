@@ -54,7 +54,7 @@ class ApiClient extends DioClient {
       'Content-Type': 'application/json',
       // 'Authorization':
       //     'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJsdW1lbi1qd3QiLCJzdWIiOiI2MTdhNWVmNjE1N2UwMDAwNDMwMDQ0OTIiLCJpYXQiOjE2MzcyMDE5OTAsImV4cCI6MTYzNzQxNzk5MH0.E4SHgpiTCXVrr-YEir7mDyrrtQq8mQsUF6R859VbXnQ',
-      'Authorization' :'Bearer ${LocalUserData.getInstance.accessToken}',
+      // 'Authorization' :'Bearer ${LocalUserData.getInstance.accessToken}',
       'Accept-Language': '${LocalUserData.getInstance.defaultLanguage}'
     };
   }

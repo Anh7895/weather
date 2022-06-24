@@ -58,7 +58,7 @@ class _BaseAppState extends State<BaseApp> {
       LocalUserData.getInstance.defaultLanguage = _locale?.languageCode;
     });
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-        statusBarColor: ThemeColor.appStyleColor,
+        statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.light
     ));

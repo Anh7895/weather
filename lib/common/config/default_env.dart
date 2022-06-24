@@ -4,18 +4,18 @@ class DefaultConfig {
   // static const baseUrl = 'https://api.chargenow.io/api/v1';
   static const baseUrlWebSocketDev= 'wss://chat-dev.toprate.io/websocket';
   static const baseUrlWebSocketProduct= 'wss://chat.chargenow.io/websocket';
-  static const baseUrl = 'https://api-charger.toprate.io/api/v1';
+  static const baseUrl = 'https://api.openweathermap.org';
   // static const baseUrlProdChat = 'https://chat.chargenow.io';
   static const baseUrlProdChat = 'https://chat-dev.toprate.io';
 
   ///Suffix API
-  static const loginEndPoint = '/auth/login';
+  static const getWeatherNowEndPoint = '/data/2.5/weather';
 
 
 
 
   // static const loginUrl = baseUrl + imagePath;
-  static const loginUrl = baseUrl + loginEndPoint;
+  static const getWeatherNowUrl = baseUrl + getWeatherNowEndPoint;
 
 
 
