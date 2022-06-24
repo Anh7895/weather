@@ -36,6 +36,8 @@ const ic_left = "assets/icons/svg/ic_left.svg";
 const ic_right = "assets/icons/svg/ic_right.svg";
 
 const img_house = "assets/images/png/img_house.png";
+const ic_bottom_sheet = "assets/icons/svg/ic_bottom_sheet.svg";
+
 
 
 

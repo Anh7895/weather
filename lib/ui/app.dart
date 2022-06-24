@@ -70,7 +70,7 @@ class _BaseAppState extends State<BaseApp> {
 
     print(_locale?.languageCode);
     return ScreenUtilInit(
-        designSize: Size(375, 812),
+        designSize: Size(390, 844),
         builder: (context,widget) => Container(
           color: Colors.grey,
           child: MultiBlocProvider(

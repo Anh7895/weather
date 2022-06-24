@@ -15,7 +15,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: ThemeColor.appStyleColor,
+    statusBarColor: Colors.transparent,
   ));
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
