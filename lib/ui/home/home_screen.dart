@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyleCommon.textStyleCaption3(context),
                           ),
                           Text(
-                            '40°',
+                            _bloc.weatherNowModel.main?.temp == null ? '--':'32°',
                             style: TextStyleCommon.textStyleCaption4(context),
                           ),
                           Text(
