@@ -31,19 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getLocationData().then((value) {
-      position = value;
-    }).whenComplete(() => {
-          if (position == null)
-            {_bloc.add(GetWeatherNowEvent()), print('nooooo')}
-          else
-            {
-              print('yessssssssssss'),
-              _bloc.add(GetWeatherNowEvent(
-                  lat: position?.latitude, lon: position?.longitude))
-            }
-        });
-
     // checkPermission(position);
 
     // WidgetsBinding.instance?.addPostFrameCallback((_) async {
@@ -186,19 +173,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            _bloc.weatherNowModel.name ?? '--',
+                            '--',
                             style: TextStyleCommon.textStyleCaption3(context),
                           ),
                           Text(
-                            _bloc.weatherNowModel.main?.temp == null ? '--':'32°',
+                            '32°',
                             style: TextStyleCommon.textStyleCaption4(context),
                           ),
                           Text(
-                            _bloc.weatherNowModel.weather?[0].main ?? '--',
+                            '--',
                             style: TextStyleCommon.textStyleOpacity(context),
                           ),
                           Text(
-                            'H:${_bloc.weatherNowModel.main?.tempMax ?? '--'}° L:${_bloc.weatherNowModel.main?.tempMin ?? '--'}°',
+                            'H:--° L: -- °',
                             style: TextStyleCommon.textStyleCaption1(context),
                           ),
                           LocalImageWidget(
