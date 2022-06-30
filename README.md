@@ -89,6 +89,7 @@ void _configureRepositories();
 @Register.factory(NewDataSource)
 void _configureDataSources();
 
+
 sau đó run `flutter packages pub run build_runner build --delete-conflicting-outputs` để generate lại data
 
 

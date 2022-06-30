@@ -1,7 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.weather">
+<!-- hiển thị vị trí chính xác của người dùng-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<!--    kết quả nằm trong 1 vùng-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<!--    nếu bạn muốn tiếp tục cập nhật ngay cả khi ứng dụng của bạn đang chạy trong nền-->
+<!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
    <application
         android:label="weather-app"
         android:icon="@mipmap/ic_launcher">

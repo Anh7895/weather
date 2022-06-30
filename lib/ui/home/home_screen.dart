@@ -12,6 +12,7 @@ import 'package:weather/common/resource/theme_color.dart';
 import 'package:weather/common/widgets/http_stream_handler.dart';
 import 'package:weather/common/widgets/images/local_image_widget.dart';
 import 'package:weather/common/widgets/images/svg_image_widget.dart';
+import 'package:weather/datasource/data/model/request/home_request.dart';
 
 import '../../bloc/base_state/base_state.dart';
 import '../../common/injector/injector.dart';
@@ -31,108 +32,52 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // checkPermission(position);
-
-    // WidgetsBinding.instance?.addPostFrameCallback((_) async {
-    //   showModalBottomSheet(
-    //       isDismissible: false,
-    //       enableDrag: false,
-    //       barrierColor: Colors.transparent,
-    //       shape: const RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.vertical(
-    //           top: Radius.circular(35.0),
-    //         ),
-    //       ),
-    //       backgroundColor: ThemeColor.clr_2E335A.withOpacity(0.9),
-    //       context: context, builder: (BuildContext context) {
-    //     return Container(
-    //       height: 90,
-    //       padding: EdgeInsets.only(top: height_35),
-    //       child: Stack(
-    //         children: [
-    //           Align(
-    //             alignment: Alignment.bottomCenter,
-    //             child: Transform.scale(
-    //               scale: 1.01,
-    //               child: CustomPaint(
-    //                 painter: BottomCenterCustomPainters(),
-    //                 child: Container(
-    //                   height: 65,
-    //                   padding: EdgeInsets.symmetric(horizontal: width_20),
-    //                   child: Row(
-    //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                     crossAxisAlignment: CrossAxisAlignment.center,
-    //                     children: [
-    //                       GestureDetector(
-    //                         onTap: (){
-    //                           print('left');
-    //                         },
-    //                         child: SVGImageWidget(
-    //                           url: ic_left,
-    //                           width: width_35,
-    //                           height: width_35,
-    //                         ),
-    //                       ),
-    //                       GestureDetector(
-    //                         onTap: (){
-    //                           print('right');
-    //                         },
-    //                         child: SVGImageWidget(
-    //                           url: ic_right,
-    //                           width: width_35,
-    //                           height: width_35,
-    //                         ),
-    //                       )
-    //                     ],
-    //                   ),
-    //                 ),
-    //               ),
-    //             ),
-    //           ),
-    //           Align(
-    //             alignment: Alignment.bottomCenter,
-    //             child: Stack(
-    //               children: [
-    //                 CustomPaint(
-    //                     painter: BottomCustomPainter(),
-    //                     child: Container(
-    //                       alignment: Alignment.center,
-    //                       height: 90,
-    //                       width: MediaQuery.of(context).size.width /1.2,
-    //                       child: GestureDetector(
-    //                         onTap: (){
-    //                           print('click');
-    //                         },
-    //                         child: Container(
-    //                           decoration: BoxDecoration(
-    //                             color: Colors.white,
-    //                             borderRadius: BorderRadius.circular(500),
-    //                           ),
-    //                           child: SVGImageWidget(
-    //                             url: ic_add,
-    //                             width: width_50,
-    //                             height: width_50,
-    //                           ),
-    //                         ),
-    //                       ),
-    //                     )
-    //                 ),
-    //               ],
-    //             )
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   });
-    // });
+    _bloc.add(GetDataHomeEvent(
+        homeRequest: HomeRequest(
+            appid: '36c6afeee531eb6d4daaf6265cc4739d',
+            lat: '9.915951',
+            lon: '105.699334')));
+    // getLocationData().then((value) => () {
+    //       position = value;
+    //     });
   }
 
   Future<Position> getLocationData() async {
-    permission = await Geolocator.requestPermission();
-    var position = await GeolocatorPlatform.instance
-        .getCurrentPosition(locationSettings: LocationSettings());
+    permission = await Geolocator
+        .requestPermission(); // yêu cầu truy cập vào vị trí của thiết bị
+    var position = await GeolocatorPlatform.instance.getCurrentPosition(
+        locationSettings: LocationSettings()); // tìm nạp vị trí của người dùng
     return position;
   }
+
+  // void getLocation()async{
+  //   Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+  //   print(position);
+  // }
+  //
+  //
+  // Future<Position> determinePosition() async {
+  //   bool? serviceEnabled;
+  //   LocationPermission? permission;
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     return Future.error('Location services are disabled.');
+  //   }
+  //
+  //   permission = await Geolocator.checkPermission();
+  //   permission = await Geolocator.requestPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     return Future.error('Location permissions are denied');
+  //   }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+  //   Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+  //   print(position);
+  //
+  //   return await Geolocator.getCurrentPosition();
+  // }
 
   @override
   void dispose() {
@@ -173,19 +118,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            '--',
+                            _bloc.homeResponse.name ?? 'a',
                             style: TextStyleCommon.textStyleCaption3(context),
                           ),
                           Text(
-                            '32°',
+                            '${_bloc.homeResponse.coord?.lat}',
                             style: TextStyleCommon.textStyleCaption4(context),
                           ),
                           Text(
-                            '--',
+                            'aaaaaa',
                             style: TextStyleCommon.textStyleOpacity(context),
                           ),
                           Text(
-                            'H:--° L: -- °',
+                            'H:' + '${_bloc.homeResponse.coord?.lat}'+'°' + '   L:' + '${_bloc.homeResponse.coord?.lon}'+'°',
                             style: TextStyleCommon.textStyleCaption1(context),
                           ),
                           LocalImageWidget(
@@ -231,21 +176,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: ListView.builder(
                                       itemCount: 30,
                                       scrollDirection: Axis.horizontal,
-                                      padding:
-                                          EdgeInsets.only(left: width_15),
+                                      padding: EdgeInsets.only(left: width_15),
                                       itemBuilder: (context, index) {
                                         return Container(
                                           padding: EdgeInsets.symmetric(
                                               vertical: height_20,
                                               horizontal: height_15),
-                                          margin: EdgeInsets.only(
-                                              right: width_10),
+                                          margin:
+                                              EdgeInsets.only(right: width_10),
                                           decoration: BoxDecoration(
                                             color: ThemeColor.clr_48319D
                                                 .withOpacity(0.2),
-                                            borderRadius:
-                                                BorderRadius.circular(
-                                                    radius_24),
+                                            borderRadius: BorderRadius.circular(
+                                                radius_24),
                                           ),
                                           child: Column(
                                             mainAxisAlignment:
@@ -299,14 +242,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               painter: BottomCenterCustomPainters(),
                               child: Container(
                                 height: 65,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: width_20),
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: width_20),
                                 child: Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     GestureDetector(
                                       onTap: () {
@@ -343,9 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Container(
                                       alignment: Alignment.center,
                                       height: 90,
-                                      width: MediaQuery.of(context)
-                                          .size
-                                          .width /
+                                      width: MediaQuery.of(context).size.width /
                                           1.2,
                                       child: GestureDetector(
                                         onTap: () {
@@ -355,8 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius:
-                                            BorderRadius
-                                                .circular(500),
+                                                BorderRadius.circular(500),
                                           ),
                                           child: SVGImageWidget(
                                             url: ic_add,

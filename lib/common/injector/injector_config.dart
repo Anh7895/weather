@@ -1,10 +1,12 @@
 
 import 'package:weather/bloc/dashboard/dashboard_bloc.dart';
+import 'package:weather/datasource/data/model/remote/home_data_source.dart';
 import 'package:weather/datasource/network/dio/api_client.dart';
 import 'package:weather/datasource/network/dio/dio_client.dart';
 import 'package:weather/datasource/network/network_info.dart';
 import 'package:dio/dio.dart';
 import 'package:kiwi/kiwi.dart';
+import 'package:weather/datasource/repository/home_repository.dart';
 
 
 
@@ -41,9 +43,9 @@ abstract class InjectorConfig {
   @Register.factory(DashboardBloc)
   @Register.factory(HomeBloc)
   void _configureBlocs();
-
+  @Register.factory(HomeRepository)
   void _configureRepositories();
-
+  @Register.factory(HomeDataSource)
   void _configureDataSources();
 
   @Register.factory(ApiClient)
