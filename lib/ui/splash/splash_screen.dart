@@ -21,10 +21,10 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     getLanguage();
     getStation();
+    getDataLocal();
     getToken().then((value) {
       if(value != null && value != ''){
         Future.delayed(Duration(seconds: 1), () {
-
         });
       }else{
         Future.delayed(Duration(seconds: 1), () {
@@ -51,6 +51,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Future getStation() async {
     // await LocalUserData.getInstance.getPersonal();
     await LocalUserData.getInstance.getSearchContent();
+  }
+  // lấy data home
+  Future getDataLocal() async {
+    print('run here');
+    await LocalUserData.getInstance.getDataHome();
   }
 
   @override

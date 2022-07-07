@@ -5,9 +5,8 @@ abstract class HomeState extends BaseState {}
 
 class StartHomeState extends HomeState {}
 class GetDataHomeSuccessState extends HomeState{
-final HomeResponse homeResponse;
-
-  GetDataHomeSuccessState({required this.homeResponse});
-
+  GetDataHomeSuccessState();
+  // bỏ vì không dùng đến data homeResponse
+// final HomeResponse homeResponse;
+//   GetDataHomeSuccessState({required this.homeResponse});
 }
-

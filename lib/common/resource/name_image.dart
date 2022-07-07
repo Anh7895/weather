@@ -6,6 +6,12 @@ const png_ic_logo_horizontal = "assets/icons/png/ic_logo_horizontal.png";
 const png_search_maps= "assets/images/png/search_maps.png";
 const png_ic_apple= "assets/icons/png/ic_apple.png";
 const img_backgound= "assets/images/png/backgound.png";
+const ic_snowflakes= "assets/icons/png/ic_snowflakes.png";
+const ic_uv= "assets/icons/png/ic_uv.png";
+const ic_sunrise= "assets/icons/png/ic_sunrise.png";
+const ic_wind= "assets/icons/png/ic_wind.png";
+const ic_rainfall= "assets/icons/png/ic_rainfall.png";
+
 
 const img_angled_rain= "assets/icons/png/ic_angled_rain.png";
 const img_cloud_rain= "assets/icons/png/ic_cloud_rain.png";

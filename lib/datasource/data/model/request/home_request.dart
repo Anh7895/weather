@@ -11,9 +11,9 @@ class HomeRequest{
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['appid'] = this.appid;
-    data['lat'] = this.lat;
-    data['lon'] = this.lon;
+    data['appid'] = appid;
+    data['lat'] = lat;
+    data['lon'] = lon;
     return data;
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:weather/common/utils/preference_utils.dart';
-import 'package:flutter/material.dart';
+import 'package:weather/datasource/data/model/reponse/home_response.dart';
 
 
 class LocalUserData {
@@ -14,6 +14,9 @@ class LocalUserData {
   static LocalUserData get getInstance => _singleton;
 
   String? partnerPhoneNumber;
+  String? name;
+  String? lat;
+  String? lon;
   String? imgUrl;
   String? partnerName;
   String? accessToken = '';
@@ -27,6 +30,12 @@ class LocalUserData {
   bool isFilter = false;
   bool isFree = false;
   bool isReady = false;
+
+
+
+  HomeResponse? homeResponse = HomeResponse();
+
+
 
 
   List<String> historySearch = [];
@@ -121,6 +130,19 @@ class LocalUserData {
       return [];
     } catch (e) {
       return [];
+    }
+  }
+  Future<HomeResponse?> getDataHome() async {
+    try {
+      String weatherPrefs = await PreferenceUtils.getString("homeResponse");
+      if (weatherPrefs == null || weatherPrefs.isEmpty) return HomeResponse();
+      dynamic personal = jsonDecode(weatherPrefs);
+      homeResponse = HomeResponse.fromJson(personal);
+      print('data here ');
+      return homeResponse;
+    } catch (e) {
+      print("errget $e");
+      return HomeResponse();
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:weather/common/config/nav_key.dart';
+import 'package:weather/datasource/data/model/reponse/home_response.dart';
 import 'package:weather/datasource/network/dio/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:weather/common/config/default_env.dart';
@@ -63,5 +64,3 @@ class ApiClient extends DioClient {
 saveToken(String? accessToken) async {
   return await PreferenceUtils.setString("access_token", accessToken ?? "");
 }
-
-

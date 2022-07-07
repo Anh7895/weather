@@ -54,8 +54,12 @@ dependencies:
   image: ^3.0.2
   flutter_native_image: ^0.0.6
   geolocator: ^8.0.0
+  permission_handler: ^9.0.1
+  geocode: 1.0.1
+  location: ^4.4.0
   rxdart: ^0.27.2
   fl_chart: ^0.50.1
+  shimmer: ^2.0.0
 
 
 
