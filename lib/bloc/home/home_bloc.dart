@@ -6,7 +6,7 @@ import 'package:bloc/bloc.dart';
 import 'package:weather/common/utils/preference_utils.dart';
 import 'package:weather/datasource/data/local_user_data.dart';
 import 'package:weather/datasource/data/model/reponse/home_response.dart';
-import 'package:weather/datasource/network/dio/api_client.dart';
+import 'package:weather/datasource/data/model/reponse/home_response_current.dart';
 import 'package:weather/datasource/repository/home_repository.dart';
 import 'home_event.dart';
 import 'home_state.dart';
@@ -16,9 +16,11 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
 
   HomeBloc(this.homeRepository) : super(StartHomeState()) {
     on<GetDataHomeEvent>((event, emit) => getHomeWeather(event, emit));
+    on<GetDataCurrentHomeEvent>((event, emit) => getHomeCurrentWeather(event, emit));
   }
 
   HomeResponse? homeResponse = LocalUserData.getInstance.homeResponse;
+  HomeResponseCurrent? homeResponseCurrent = HomeResponseCurrent();
   //
   // Future<HomeRequest> buildHome(GetDataHomeEvent event) async{
   //   return HomeRequest(
@@ -30,6 +32,9 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
   saveData(HomeResponse? homeResponse) async{
     return await PreferenceUtils.setString('homeResponse', jsonEncode(homeResponse));
   }
+  // api call function using isolate
+
+/// bỏ try catch để hiện lỗi
   Future<void> getHomeWeather(
       GetDataHomeEvent event, Emitter<BaseState> emit) async {
     emit(StartCallApiState());
@@ -38,14 +43,14 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
       homeResponse = response;
       saveData(homeResponse);
       if (response != null) {
-        emit(GetDataHomeSuccessState());
+        emit(GetDataHomeState());
       } else {
         emit(ApiErrorState(errorMessage: "Get data detail false"));
       }
     } on DioError catch (e) {
     } catch (e) {
-
     }
+
 
 
 
@@ -57,5 +62,22 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
     //       appId: '36c6afeee531eb6d4daaf6265cc4739d');
     // }
 
+  }
+ /// call api 2
+  Future<void>getHomeCurrentWeather(GetDataCurrentHomeEvent event, Emitter<BaseState> emit) async{
+    emit(StartCallApiState());
+    // try {
+      final response = await homeRepository.getCurrentWeather(event.homeCurrentRequest);
+      homeResponseCurrent = response;
+      print('data: $response');
+      //saveData(homeResponse);
+      if (response != null) {
+        emit(GetDataHomeCurrentState());
+      } else {
+        emit(ApiErrorState(errorMessage: "Get data detail false"));
+      }
+    // } on DioError catch (e) {
+    // } catch (e) {
+    // }
   }
 }

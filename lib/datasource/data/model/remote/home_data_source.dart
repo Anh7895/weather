@@ -1,6 +1,8 @@
 import 'package:weather/common/config/default_env.dart';
 import 'package:weather/datasource/data/model/reponse/home_response.dart';
+import 'package:weather/datasource/data/model/reponse/home_response_current.dart';
 import 'package:weather/datasource/data/model/request/home_request.dart';
+import 'package:weather/datasource/data/model/request/home_request_current.dart';
 import 'package:weather/datasource/network/dio/api_client.dart';
 
 class HomeDataSource {
@@ -22,4 +24,15 @@ class HomeDataSource {
     //   return HomeResponse();
     // }
   }
+  // api 2
+  Future<HomeResponseCurrent> getDataCurrentHome(HomeCurrentRequest? homeCurrentRequest)async{
+    final response =
+    await apiClient.get(DefaultConfig.getWeatherCurrentNowUrl, queryParameters: {
+       // appid chắc chắn khác null
+      'lat': homeCurrentRequest!.lat,
+      'long': homeCurrentRequest.lon,
+    });
+    return HomeResponseCurrent.fromJson(response);
+  }
 }
+

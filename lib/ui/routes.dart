@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather/isolate.dart';
 import 'package:weather/ui/splash/splash_screen.dart';
 
 import '../common/config/routers_name.dart';
@@ -12,6 +13,10 @@ class Routes {
         return MaterialPageRoute(
             builder: (_) => HomeScreen(),
             settings: const RouteSettings(name: RouteName.loginScreen));
+      case RouteName.MyApp:
+        return MaterialPageRoute(
+            builder: (_) => MyApp(),
+            settings: const RouteSettings(name: RouteName.MyApp));
       case RouteName.dashboard:
         return MaterialPageRoute(
             builder: (_) => const DashboardScreen(),

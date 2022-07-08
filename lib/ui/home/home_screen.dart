@@ -10,12 +10,11 @@ import 'package:weather/common/resource/name_image.dart';
 import 'package:weather/common/resource/sizes.dart';
 import 'package:weather/common/resource/text_style.dart';
 import 'package:weather/common/resource/theme_color.dart';
-import 'package:weather/common/utils/preference_utils.dart';
 import 'package:weather/common/widgets/http_stream_handler.dart';
 import 'package:weather/common/widgets/images/local_image_widget.dart';
 import 'package:weather/common/widgets/images/svg_image_widget.dart';
-import 'package:weather/datasource/data/local_user_data.dart';
 import 'package:weather/datasource/data/model/request/home_request.dart';
+import 'package:weather/datasource/data/model/request/home_request_current.dart';
 
 import '../../bloc/base_state/base_state.dart';
 import '../../common/injector/injector.dart';
@@ -30,6 +29,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeBloc _bloc = Injector.resolve<HomeBloc>();
 
+
   // PermissionStatus _permissionStatus = PermissionStatus.denied;
 
   // LocationPermission? permission;
@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     requestLocation();
+
     //geolocator
     // getLocationData().then((value) => () {
     //       position = value;
@@ -118,6 +119,10 @@ class _HomeScreenState extends State<HomeScreen> {
               appid: '36c6afeee531eb6d4daaf6265cc4739d',
               lat: '9.915951',
               lon: '105.699334')));
+      _bloc.add(GetDataCurrentHomeEvent(
+        homeCurrentRequest: HomeCurrentRequest(
+            lat: '9.915951',
+            lon: '105.699334'),));
     } else if (_permissionGranted == PermissionStatus.granted) {
       _locationData = await location
           .getLocation(); // lấy lat lon thì phải cho hàm getLocation vào trong grandted
@@ -126,21 +131,26 @@ class _HomeScreenState extends State<HomeScreen> {
             appid: '36c6afeee531eb6d4daaf6265cc4739d',
             lat: '${_locationData.latitude}',
             lon: '${_locationData.longitude}'),
+
       ));
+      _bloc.add(GetDataCurrentHomeEvent(
+          homeCurrentRequest: HomeCurrentRequest(
+              lat: '${_locationData.latitude}',
+              lon: '${_locationData.longitude}'),));
+
     } else if (_permissionGranted == PermissionStatus.deniedForever) {
       _bloc.add(GetDataHomeEvent(
           homeRequest: HomeRequest(
               appid: '36c6afeee531eb6d4daaf6265cc4739d',
               lat: '9.915951',
               lon: '105.699334')));
+      _bloc.add(GetDataCurrentHomeEvent(
+        homeCurrentRequest: HomeCurrentRequest(
+            lat: '9.915951',
+            lon: '105.699334'),));
     }
 
-    // if (_permissionGranted == PermissionStatus.denied) {
-    //   _permissionGranted = await location.requestPermission();
-    //   if (_permissionGranted != PermissionStatus.granted) {
-    //     return print('granted');
-    //   }
-    // }
+
   }
 
   // getting current location - lấy vị trí hiện tại
@@ -214,9 +224,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        _bloc.homeResponse?.name != null
+                        _bloc.homeResponseCurrent?.data?.weatherState?.name != null
                             ? Text(
-                                _bloc.homeResponse?.name ?? 'a',
+                          '${_bloc.homeResponseCurrent?.data?.weatherState?.name}' ,
                                 style:
                                     TextStyleCommon.textStyleCaption3(context),
                               )
@@ -229,21 +239,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 baseColor: Colors.grey[500]!,
                                 highlightColor: Colors.grey[100]!),
                         Text(
-                          '32 °C',
+                          '${_bloc.homeResponse?.data?.current?.temperature?.value}',
                           style: TextStyleCommon.textStyleCaption4(context),
                         ),
                         Text(
                           'Mostly Clear',
                           style: TextStyleCommon.textStyleOpacity(context),
                         ),
-                        (_bloc.homeResponse?.coord?.lat != null &&
-                                _bloc.homeResponse?.coord?.lon != null)
+                        (_bloc.homeResponse?.data?.current?.temperature?.value != null &&
+                            _bloc.homeResponse?.data?.current?.temperature?.value != null)
                             ? Text(
                                 'H:' +
-                                    '${_bloc.homeResponse?.coord?.lat}' +
+                                    '${_bloc.homeResponse?.data?.current?.temperature?.value}' + // lấy data trong list
                                     '°' +
                                     '   L:' +
-                                    '${_bloc.homeResponse?.coord?.lon}' +
+                                    '${_bloc.homeResponse?.data?.current?.temperature?.value}'+
                                     '°',
                                 style:
                                     TextStyleCommon.textStyleCaption1(context),
@@ -342,8 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 left: width_15),
                                                         itemBuilder:
                                                             (context, index) {
-                                                          return _bloc.homeResponse!
-                                                                      .cod !=
+                                                          return _bloc.homeResponse?.data?.hourlyList?[index].temperature !=
                                                                   null
                                                               ? Container(
                                                                   padding: EdgeInsets.symmetric(
@@ -374,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             .center,
                                                                     children: [
                                                                       Text(
-                                                                        '${_bloc.homeResponse!.cod}',
+                                                                        '${_bloc.homeResponse?.data?.hourlyList?[index].temperature?.value}',
                                                                         style: TextStyleCommon.textStyleSubheadline(
                                                                             context),
                                                                       ),
@@ -393,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           height:
                                                                               height_10),
                                                                       Text(
-                                                                          '19°',
+                                                                          '${_bloc.homeResponse?.data?.hourlyList?[index].forecastTime?.substring(11,13)}',
                                                                           style:
                                                                               TextStyleCommon.textStyleTitle3(context)),
                                                                     ],
@@ -437,8 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             left: width_15),
                                                         itemBuilder:
                                                             (context, index) {
-                                                          return _bloc.homeResponse!
-                                                              .cod !=
+                                                          return _bloc.homeResponse?.data?.hourlyList?[index].temperature !=
                                                               null
                                                               ? Container(
                                                             padding: EdgeInsets.symmetric(
@@ -469,7 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   .center,
                                                               children: [
                                                                 Text(
-                                                                  '${_bloc.homeResponse!.cod}',
+                                                                  '${_bloc.homeResponse?.data?.hourlyList?[index].temperature}',
                                                                   style: TextStyleCommon.textStyleSubheadline(
                                                                       context),
                                                                 ),
@@ -549,7 +557,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Column(
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.all(20.0),
+                                    padding: EdgeInsets.all(width_20),
                                     height: height_160,
                                     decoration: BoxDecoration(
                                       color: ThemeColor.clr_48319D
@@ -589,6 +597,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                               fontSize: 20,
                                               color: ThemeColor.clr_FFFFFF),
                                         ),
+                                        Container(
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.black, width: 0.1),
+                                            gradient: LinearGradient(colors: [
+                                              ThemeColor.clr_1D3AF2,
+                                              ThemeColor.clr_EF4C5E,
+                                            ]),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          child: SliderTheme(
+                                            data: SliderTheme.of(context).copyWith(
+                                              activeTrackColor: Colors.white,
+                                              inactiveTrackColor: Colors.white,
+                                              trackHeight: 0.1,
+                                              thumbColor: Colors.white,
+                                              overlayColor: Colors.white.withAlpha(1),
+
+                                            ),
+                                            child:  Slider(
+                                              onChanged: null, value: 1 ,
+                                            ),
+                                          ),
+                                        ),
+
+
                                         InkWell(
                                           onTap: () {},
                                           child: Row(
@@ -812,7 +846,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ],
                                   ),
-
                                 ],
                               ),
                             ),

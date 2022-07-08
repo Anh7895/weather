@@ -10,7 +10,7 @@ class HomeRequest{
     lon = json['lon'];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['appid'] = appid;
     data['lat'] = lat;
     data['lon'] = lon;

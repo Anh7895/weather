@@ -60,6 +60,9 @@ dependencies:
   rxdart: ^0.27.2
   fl_chart: ^0.50.1
   shimmer: ^2.0.0
+  syncfusion_flutter_sliders: ^20.2.36
+  flutter_isolate: ^2.0.2
+  flutter_downloader: ^1.7.4
 
 
 

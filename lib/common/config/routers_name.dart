@@ -4,5 +4,6 @@ class RouteName {
   static const splashScreen = '/splash_screen';
   static const dashboard = '/dashboard';
   static const home = '/home';
+  static const MyApp = '/my-app';
 
 }
