@@ -19,7 +19,7 @@ class HomeDataSource {
     });
 
     // if (response['appid'] != null) {
-      return HomeResponse.fromJson(response);
+      return HomeResponse.fromJson(response['data']);///  HomeResponse chỉ chứa data
     // } else {
     //   return HomeResponse();
     // }
@@ -30,9 +30,9 @@ class HomeDataSource {
     await apiClient.get(DefaultConfig.getWeatherCurrentNowUrl, queryParameters: {
        // appid chắc chắn khác null
       'lat': homeCurrentRequest!.lat,
-      'long': homeCurrentRequest.lon,
+      'lon': homeCurrentRequest.lon,
     });
-    return HomeResponseCurrent.fromJson(response);
+    return HomeResponseCurrent.fromJson(response['data']);
   }
 }
 

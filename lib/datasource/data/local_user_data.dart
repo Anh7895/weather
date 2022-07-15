@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:weather/common/utils/preference_utils.dart';
 import 'package:weather/datasource/data/model/reponse/home_response.dart';
 
+import 'model/reponse/home_response_current.dart';
 
 class LocalUserData {
   static final LocalUserData _singleton = LocalUserData._internal();
@@ -23,7 +24,8 @@ class LocalUserData {
   String? deviceToken = '';
   String? chat_id = '';
   String? chat_token = '';
-  int? user_id ;
+  int? user_id;
+
   String? refreshToken;
   String? defaultLanguage = /*"En"*/ "vi";
   bool isFavorite = false;
@@ -31,29 +33,24 @@ class LocalUserData {
   bool isFree = false;
   bool isReady = false;
 
-
-
   HomeResponse? homeResponse = HomeResponse();
-
-
-
+  HomeResponseCurrent? homeResponseCurrent = HomeResponseCurrent();
 
   List<String> historySearch = [];
-
 
   ///Add data to history search
   addListSearch(String? textSearch) {
     if (historySearch.length > 10) {
       historySearch.removeLast();
     }
-    if (historySearch.length == 0) {
+    if (historySearch.isEmpty) {
       historySearch.add(textSearch ?? '');
       return;
     }
     historySearch.insert(0, textSearch ?? '');
   }
 
-  changeFavorite({required bool favorite}){
+  changeFavorite({required bool favorite}) {
     isFavorite = favorite;
     print("Favorite Station $isFavorite");
     return isFavorite;
@@ -62,9 +59,9 @@ class LocalUserData {
   ///Handle get service key selected
 
   ///Handle remove service select
-  removeServiceSelect(){
+  removeServiceSelect() {
     isFavorite = false;
-    isFilter= false;
+    isFilter = false;
     isFree = false;
     isReady = false;
   }
@@ -132,17 +129,35 @@ class LocalUserData {
       return [];
     }
   }
+
   Future<HomeResponse?> getDataHome() async {
-    try {
+    // try {
       String weatherPrefs = await PreferenceUtils.getString("homeResponse");
       if (weatherPrefs == null || weatherPrefs.isEmpty) return HomeResponse();
       dynamic personal = jsonDecode(weatherPrefs);
       homeResponse = HomeResponse.fromJson(personal);
       print('data here ');
       return homeResponse;
-    } catch (e) {
-      print("errget $e");
-      return HomeResponse();
-    }
+    // } catch (e) {
+    //   print("errget $e");
+    //   return HomeResponse();
+    // }
+  }
+// lấy data từ share ra rồi chuyển data sang obj
+  Future<HomeResponseCurrent?> getDataHomeCurrent() async {
+    // try {
+    String weatherPrefs =
+        await PreferenceUtils.getString("homeResponseCurrent");
+    if (weatherPrefs == null || weatherPrefs.isEmpty)
+      return HomeResponseCurrent();
+    dynamic personal = jsonDecode(weatherPrefs);
+    homeResponseCurrent = HomeResponseCurrent.fromJson(personal);
+    print('data hereeee ');
+    print('data ne ${homeResponseCurrent?.wind?.speed.toString()}');
+    return homeResponseCurrent;
+    // } catch (e) {
+    //   print("errget $e");
+    //   return HomeResponseCurrent();
+    // }
   }
 }

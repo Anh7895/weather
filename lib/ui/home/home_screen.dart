@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:weather/bloc/home/home_bloc.dart';
 import 'package:weather/bloc/home/home_event.dart';
 import 'package:weather/common/resource/name_image.dart';
 import 'package:weather/common/resource/sizes.dart';
 import 'package:weather/common/resource/text_style.dart';
 import 'package:weather/common/resource/theme_color.dart';
+import 'package:weather/common/utils/preference_utils.dart';
 import 'package:weather/common/widgets/http_stream_handler.dart';
 import 'package:weather/common/widgets/images/local_image_widget.dart';
 import 'package:weather/common/widgets/images/svg_image_widget.dart';
+import 'package:weather/datasource/data/local_user_data.dart';
 import 'package:weather/datasource/data/model/request/home_request.dart';
 import 'package:weather/datasource/data/model/request/home_request_current.dart';
 
@@ -29,7 +32,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeBloc _bloc = Injector.resolve<HomeBloc>();
 
-
+  // save data dạng object vào local
+  Future getDataHomeLocal() async {
+    print('run getDataHomeLocal');
+    await LocalUserData.getInstance.getDataHome(); /// lấy data api getweather
+    await LocalUserData.getInstance.getDataHomeCurrent();///get data home current
+  }
+  //get data home current
   // PermissionStatus _permissionStatus = PermissionStatus.denied;
 
   // LocationPermission? permission;
@@ -39,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     requestLocation();
-
+  getDataHomeLocal();
     //geolocator
     // getLocationData().then((value) => () {
     //       position = value;
@@ -224,9 +233,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        _bloc.homeResponseCurrent?.data?.weatherState?.name != null
+                        _bloc.homeResponseCurrent?.location?.name != null
                             ? Text(
-                          '${_bloc.homeResponseCurrent?.data?.weatherState?.name}' ,
+                          '${_bloc.homeResponseCurrent?.location?.name}' ,
                                 style:
                                     TextStyleCommon.textStyleCaption3(context),
                               )
@@ -234,26 +243,55 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Container(
                                   width: width_200,
                                   height: height_20,
-                                  color: Colors.white,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 baseColor: Colors.grey[500]!,
                                 highlightColor: Colors.grey[100]!),
+                        SizedBox(height: height_5,),
+                        _bloc.homeResponseCurrent?.temperature?.value != null ?
                         Text(
-                          '${_bloc.homeResponse?.data?.current?.temperature?.value}',
+                          '${(_bloc.homeResponseCurrent?.temperature?.value)!.round()}' /// làm tròn data[double] trong flutter
+                              + '${_bloc.homeResponseCurrent?.temperature?.unit}',
                           style: TextStyleCommon.textStyleCaption4(context),
-                        ),
+                        ):Shimmer.fromColors(
+                            child: Container(
+                              width: width_200,
+                              height: height_40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+
+                            ),
+                            baseColor: Colors.grey[500]!,
+                            highlightColor: Colors.grey[100]!),
+                        SizedBox(height: height_5,),
+                        _bloc.homeResponseCurrent?.weatherState?.description != null ?
                         Text(
-                          'Mostly Clear',
-                          style: TextStyleCommon.textStyleOpacity(context),
-                        ),
-                        (_bloc.homeResponse?.data?.current?.temperature?.value != null &&
-                            _bloc.homeResponse?.data?.current?.temperature?.value != null)
+                          '${_bloc.homeResponseCurrent?.weatherState?.description}',
+                          style: TextStyleCommon.textStyleOpacity(context),):Shimmer.fromColors(
+                            child: Container(
+                              width: width_200,
+                              height: height_20,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                            ),
+                            baseColor: Colors.grey[500]!,
+                            highlightColor: Colors.grey[100]!),
+                        SizedBox(height: height_5,),
+                        (_bloc.homeResponseCurrent?.temperature?.minTemperature != null &&
+                            _bloc.homeResponseCurrent?.temperature?.maxTemperature != null)
                             ? Text(
                                 'H:' +
-                                    '${_bloc.homeResponse?.data?.current?.temperature?.value}' + // lấy data trong list
+                                    '${_bloc.homeResponseCurrent?.temperature?.minTemperature!.round()}' + // lấy data trong list
                                     '°' +
                                     '   L:' +
-                                    '${_bloc.homeResponse?.data?.current?.temperature?.value}'+
+                                    '${_bloc.homeResponseCurrent?.temperature?.maxTemperature!.round()}'+
                                     '°',
                                 style:
                                     TextStyleCommon.textStyleCaption1(context),
@@ -262,7 +300,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Container(
                                   width: width_200,
                                   height: height_20,
-                                  color: Colors.white,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 baseColor: Colors.grey[500]!,
                                 highlightColor: Colors.grey[100]!),
@@ -276,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   DraggableScrollableSheet(
                     initialChildSize: 0.4,
-                    minChildSize: 0.2,
+                    minChildSize: 0.23,
                     maxChildSize: 0.4,
                     builder: (BuildContext context,
                         ScrollController scrollController) {
@@ -287,6 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           children: [
                             ClipRRect(
+
                               borderRadius: BorderRadius.circular(50),
                               child: BackdropFilter(
                                 filter: ImageFilter.blur(
@@ -344,7 +386,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   children: [
                                                     SizedBox(
                                                       child: ListView.builder(
-                                                        itemCount: 30,
+                                                        itemCount: _bloc.homeResponse?.hourlyConverts?.length,
                                                         scrollDirection:
                                                             Axis.horizontal,
                                                         padding:
@@ -352,8 +394,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 left: width_15),
                                                         itemBuilder:
                                                             (context, index) {
-                                                          return _bloc.homeResponse?.data?.hourlyList?[index].temperature !=
-                                                                  null
+                                                          return _bloc.homeResponse?.hourlyConverts?[index].temperature != null
                                                               ? Container(
                                                                   padding: EdgeInsets.symmetric(
                                                                       vertical:
@@ -383,7 +424,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             .center,
                                                                     children: [
                                                                       Text(
-                                                                        '${_bloc.homeResponse?.data?.hourlyList?[index].temperature?.value}',
+                                                                        '${_bloc.homeResponse?.hourlyConverts?[index].forecastTime?.hour}'+ ' '+'${_bloc.homeResponse?.hourlyConverts?[index].forecastTime?.format}',
                                                                         style: TextStyleCommon.textStyleSubheadline(
                                                                             context),
                                                                       ),
@@ -401,10 +442,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       SizedBox(
                                                                           height:
                                                                               height_10),
+
                                                                       Text(
-                                                                          '${_bloc.homeResponse?.data?.hourlyList?[index].forecastTime?.substring(11,13)}',
-                                                                          style:
-                                                                              TextStyleCommon.textStyleTitle3(context)),
+                                                                          '${_bloc.homeResponse?.hourlyConverts?[index].temperature?.value!.round()}' + '${_bloc.homeResponse?.hourlyConverts?[index].temperature?.unit}',
+                                                                          style: TextStyle(fontSize: 16, color: ThemeColor.clr_FFFFFF)
+                                                                              ),
                                                                     ],
                                                                   ),
                                                                 )
@@ -438,7 +480,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                     SizedBox(
                                                       child: ListView.builder(
-                                                        itemCount: 30,
+                                                        itemCount: _bloc.homeResponse?.dailyConverts?.length,
                                                         scrollDirection:
                                                         Axis.horizontal,
                                                         padding:
@@ -446,8 +488,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             left: width_15),
                                                         itemBuilder:
                                                             (context, index) {
-                                                          return _bloc.homeResponse?.data?.hourlyList?[index].temperature !=
-                                                              null
+                                                          return _bloc.homeResponse?.dailyConverts?[index].temperature != null
                                                               ? Container(
                                                             padding: EdgeInsets.symmetric(
                                                                 vertical:
@@ -477,7 +518,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   .center,
                                                               children: [
                                                                 Text(
-                                                                  '${_bloc.homeResponse?.data?.hourlyList?[index].temperature}',
+                                                                  '${_bloc.homeResponse?.dailyConverts?[index].forecastTime?.toString().substring(0,3)}',
                                                                   style: TextStyleCommon.textStyleSubheadline(
                                                                       context),
                                                                 ),
@@ -496,7 +537,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     height:
                                                                     height_10),
                                                                 Text(
-                                                                    '19°',
+                                                                    '${_bloc.homeResponse?.dailyConverts?[index].temperature?.day!.round()}' + ' C',
                                                                     style:
                                                                     TextStyleCommon.textStyleTitle3(context)),
                                                               ],
@@ -597,6 +638,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               fontSize: 20,
                                               color: ThemeColor.clr_FFFFFF),
                                         ),
+
                                         Container(
                                           height: 10,
                                           decoration: BoxDecoration(
@@ -607,17 +649,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ]),
                                             borderRadius: BorderRadius.circular(10),
                                           ),
+                                          /// https://help.syncfusion.com/flutter/slider/shapes#thumb-shape
                                           child: SliderTheme(
                                             data: SliderTheme.of(context).copyWith(
-                                              activeTrackColor: Colors.white,
-                                              inactiveTrackColor: Colors.white,
-                                              trackHeight: 0.1,
-                                              thumbColor: Colors.white,
-                                              overlayColor: Colors.white.withAlpha(1),
-
+                                              trackHeight: 0.0, /// color đường kẻ dưới thumb
+                                              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5.0, ),  /// thay đổi hình dạng kích thước của thumb
                                             ),
-                                            child:  Slider(
-                                              onChanged: null, value: 1 ,
+                                            child:   Slider(
+                                              activeColor: Colors.red,
+                                              inactiveColor: Colors.red,
+                                              thumbColor:ThemeColor.clr_FFFFFF,
+                                              onChanged: (value){
+                                              },
+                                              value: 0.3 ,
                                             ),
                                           ),
                                         ),

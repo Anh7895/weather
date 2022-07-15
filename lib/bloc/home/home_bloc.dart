@@ -18,9 +18,11 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
     on<GetDataHomeEvent>((event, emit) => getHomeWeather(event, emit));
     on<GetDataCurrentHomeEvent>((event, emit) => getHomeCurrentWeather(event, emit));
   }
-
+// lấy data ra từ singelton
   HomeResponse? homeResponse = LocalUserData.getInstance.homeResponse;
-  HomeResponseCurrent? homeResponseCurrent = HomeResponseCurrent();
+  HomeResponseCurrent? homeResponseCurrent = LocalUserData.getInstance.homeResponseCurrent;
+
+ /// HomeResponse? homeResponse = HomeResponse();
   //
   // Future<HomeRequest> buildHome(GetDataHomeEvent event) async{
   //   return HomeRequest(
@@ -29,9 +31,12 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
   //       lon: '105.699334');
   // }
 // save Data Home
-  saveData(HomeResponse? homeResponse) async{
-    return await PreferenceUtils.setString('homeResponse', jsonEncode(homeResponse));
-  }
+//   saveData(HomeResponse? homeResponse) async{
+//     return await PreferenceUtils.setString('homeResponse', jsonEncode(homeResponse));
+//   }
+  // saveDataCurrent(HomeResponseCurrent? homeResponseCurrent) async{
+  //   return await PreferenceUtils.setString('homeResponseCurrent', jsonEncode(homeResponseCurrent));
+  // }
   // api call function using isolate
 
 /// bỏ try catch để hiện lỗi
@@ -41,7 +46,11 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
     try {
       final response = await homeRepository.getWeather(event.homeRequest);
       homeResponse = response;
-      saveData(homeResponse);
+
+      /// check homeResponse trả về và response trả về , nếu trả về null, check response trả về khi call api bên data source
+      /// homeResponse?.hourlyConverts?[0].clouds?.value.toString(); => print('homeResponse?.hourlyConverts?[0].clouds?.value.toString()');
+      //saveData(homeResponse);
+      //saveDataCurrent(homeResponseCurrent);
       if (response != null) {
         emit(GetDataHomeState());
       } else {
@@ -66,7 +75,7 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
  /// call api 2
   Future<void>getHomeCurrentWeather(GetDataCurrentHomeEvent event, Emitter<BaseState> emit) async{
     emit(StartCallApiState());
-    // try {
+    try {
       final response = await homeRepository.getCurrentWeather(event.homeCurrentRequest);
       homeResponseCurrent = response;
       print('data: $response');
@@ -76,8 +85,8 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
       } else {
         emit(ApiErrorState(errorMessage: "Get data detail false"));
       }
-    // } on DioError catch (e) {
-    // } catch (e) {
-    // }
+    } on DioError catch (e) {
+    } catch (e) {
+    }
   }
 }

@@ -63,11 +63,14 @@ dependencies:
   syncfusion_flutter_sliders: ^20.2.36
   flutter_isolate: ^2.0.2
   flutter_downloader: ^1.7.4
+  workmanager: ^0.4.0
+  shared_preferences_android: ^2.0.12
 
 
 
   intl: ^0.17.0
   file_picker: ^4.2.7
+
 
     # Test connect webSocket
 
@@ -99,11 +102,31 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-  - assets/images/png/
-  - assets/icons/png/
-  - assets/icons/svg/
-  - assets/languages/
-
+    - assets/fonts/bold/SF-Pro-Text-Bold.otf
+    - assets/fonts/bold/SF-Pro-Text-Regular.otf
+    - assets/gif/loading.gif
+    - assets/icons/png/ic_angled_rain.png
+    - assets/icons/png/ic_cloud_rain.png
+    - assets/icons/png/ic_fast_wind.png
+    - assets/icons/png/ic_mid_rain.png
+    - assets/icons/png/ic_rainfall.png
+    - assets/icons/png/ic_snowflakes.png
+    - assets/icons/png/ic_sunrise.png
+    - assets/icons/png/ic_tornado.png
+    - assets/icons/png/ic_uv.png
+    - assets/icons/png/ic_wind.png
+    - assets/icons/png/splash.png
+    - assets/icons/svg/ic_add.svg
+    - assets/icons/svg/ic_bottom_sheet.svg
+    - assets/icons/svg/ic_left.svg
+    - assets/icons/svg/ic_right.svg
+    - assets/icons/svg/splash.svg
+    - assets/images/logo.png
+    - assets/images/png/backgound.png
+    - assets/images/png/img_house.png
+    - assets/images/polygon.png
+    - assets/languages/en.json
+    - assets/languages/vi.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
