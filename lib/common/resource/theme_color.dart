@@ -100,6 +100,8 @@ class ThemeColor {
   static const clr_FF9B90 = Color(0xFFFF9B90);
   static const clr_F8F1F2 = Color(0xFFF8F1F2);
   static const clr_767680 = Color(0xFF767680);
+  static const clr_2E335A = Color(0xFF2E335A);
+  static const clr_1C1B33 = Color(0xFF1C1B33);
 
   ///New
   static const clr_EEF0F4 = Color(0xFFEEF0F4);
@@ -132,7 +134,6 @@ class ThemeColor {
   static const clr_EF4C5E = Color(0xFFEF4C5E);
   static const clr_7582F4 = Color(0xFF7582F4);
   static const clr_262C51 = Color(0xFF262C51);
-  static const clr_2E335A = Color(0xFF2E335A);
   static const clr_48319D = Color(0xFF48319D);
   static const clr_EBEBF599 = Color(0xEBEBF599);
 

@@ -5,5 +5,6 @@ class RouteName {
   static const dashboard = '/dashboard';
   static const home = '/home';
   static const MyApp = '/my-app';
+  static const searchScreen = '/search-screen';
 
 }

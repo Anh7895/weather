@@ -33,8 +33,8 @@ class LocalUserData {
   bool isFree = false;
   bool isReady = false;
 
-  HomeResponse? homeResponse = HomeResponse();
-  HomeResponseCurrent? homeResponseCurrent = HomeResponseCurrent();
+  HomeResponse homeResponse = HomeResponse();
+  HomeResponseCurrent homeResponseCurrent = HomeResponseCurrent();
 
   List<String> historySearch = [];
 
@@ -130,22 +130,22 @@ class LocalUserData {
     }
   }
 
-  Future<HomeResponse?> getDataHome() async {
-    // try {
+  Future<HomeResponse> getDataHome() async {
+    try {
       String weatherPrefs = await PreferenceUtils.getString("homeResponse");
       if (weatherPrefs == null || weatherPrefs.isEmpty) return HomeResponse();
       dynamic personal = jsonDecode(weatherPrefs);
       homeResponse = HomeResponse.fromJson(personal);
-      print('data here ');
+      //print('data here ${homeResponse.currentConvert?.wind?.degrees}');
       return homeResponse;
-    // } catch (e) {
-    //   print("errget $e");
-    //   return HomeResponse();
-    // }
+    } catch (e) {
+      print("errget $e");
+      return HomeResponse();
+    }
   }
 // lấy data từ share ra rồi chuyển data sang obj
-  Future<HomeResponseCurrent?> getDataHomeCurrent() async {
-    // try {
+  Future<HomeResponseCurrent> getDataHomeCurrent() async {
+    try {
     String weatherPrefs =
         await PreferenceUtils.getString("homeResponseCurrent");
     if (weatherPrefs == null || weatherPrefs.isEmpty)
@@ -153,11 +153,12 @@ class LocalUserData {
     dynamic personal = jsonDecode(weatherPrefs);
     homeResponseCurrent = HomeResponseCurrent.fromJson(personal);
     print('data hereeee ');
-    print('data ne ${homeResponseCurrent?.wind?.speed.toString()}');
+    print('data ne ${homeResponseCurrent.wind?.speed.toString()}');
     return homeResponseCurrent;
-    // } catch (e) {
-    //   print("errget $e");
-    //   return HomeResponseCurrent();
-    // }
+    } catch (e) {
+      print("errget $e");
+      return HomeResponseCurrent();
+    }
   }
 }
+

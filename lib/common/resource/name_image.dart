@@ -11,6 +11,8 @@ const ic_uv= "assets/icons/png/ic_uv.png";
 const ic_sunrise= "assets/icons/png/ic_sunrise.png";
 const ic_wind= "assets/icons/png/ic_wind.png";
 const ic_rainfall= "assets/icons/png/ic_rainfall.png";
+const png_ic_circle_dot= "assets/icons/png/ic_circle_dot.png";
+const svg_ic_circle_dot= "assets/icons/svg/circle_three_dot.svg";
 
 
 const img_angled_rain= "assets/icons/png/ic_angled_rain.png";
@@ -18,6 +20,14 @@ const img_cloud_rain= "assets/icons/png/ic_cloud_rain.png";
 const img_fast_wind= "assets/icons/png/ic_fast_wind.png";
 const img_mid_rain= "assets/icons/png/ic_mid_rain.png";
 const img_tornado= "assets/icons/png/ic_tornado.png";
+const ic_feelslike= "assets/icons/png/ic_feelslike.png";
+const ic_humidity= "assets/icons/png/ic_humidity.png";
+const ic_pressure= "assets/icons/png/ic_pressure.png";
+const ic_visibility= "assets/icons/png/ic_visibility.png";
+const ic_background= "assets/icons/png/ic_background.png";
+const ic_cloud_png= "assets/icons/png/ic_cloud.png";
+const ic_cloud_svg= "assets/icons/svg/ic_cloud.svg";
+
 
 
 

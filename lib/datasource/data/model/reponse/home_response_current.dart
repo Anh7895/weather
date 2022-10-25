@@ -1,11 +1,11 @@
 class HomeResponseCurrent {
-  String? calculationTime;
+  CalculationTime? calculationTime;
   WeatherState? weatherState;
   Temperature? temperature;
   AtmosphericPressure? atmosphericPressure;
   Humidity? humidity;
   Wind? wind;
-  String? rain;
+  Rain? rain;
   String? snow;
   Humidity? clouds;
   Location? location;
@@ -23,7 +23,9 @@ class HomeResponseCurrent {
         this.location});
 
   HomeResponseCurrent.fromJson(Map<String, dynamic> json) {
-    calculationTime = json['calculationTime'];
+    calculationTime = json['calculationTime'] != null
+        ? new CalculationTime.fromJson(json['calculationTime'])
+        : null;
     weatherState = json['weatherState'] != null
         ? new WeatherState.fromJson(json['weatherState'])
         : null;
@@ -48,7 +50,9 @@ class HomeResponseCurrent {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['calculationTime'] = this.calculationTime;
+    if (this.calculationTime != null) {
+      data['calculationTime'] = this.calculationTime!.toJson();
+    }
     if (this.weatherState != null) {
       data['weatherState'] = this.weatherState!.toJson();
     }
@@ -72,6 +76,49 @@ class HomeResponseCurrent {
     if (this.location != null) {
       data['location'] = this.location!.toJson();
     }
+    return data;
+  }
+}
+class Rain {
+  double? oneHourLevel;
+  String? unit;
+
+  Rain({this.oneHourLevel, this.unit});
+
+  Rain.fromJson(Map<String, dynamic> json) {
+    oneHourLevel = json['oneHourLevel'];
+    unit = json['unit'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['oneHourLevel'] = this.oneHourLevel;
+    data['unit'] = this.unit;
+    return data;
+  }
+}
+
+class CalculationTime {
+  String? hour;
+  String? minutes;
+  String? s;
+  String? format;
+
+  CalculationTime({this.hour, this.minutes, this.s, this.format});
+
+  CalculationTime.fromJson(Map<String, dynamic> json) {
+    hour = json['hour'];
+    minutes = json['minutes'];
+    s = json['s'];
+    format = json['format'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['hour'] = this.hour;
+    data['minutes'] = this.minutes;
+    data['s'] = this.s;
+    data['format'] = this.format;
     return data;
   }
 }

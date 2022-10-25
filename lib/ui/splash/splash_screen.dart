@@ -38,13 +38,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future getToken() async {
     return LocalUserData.getInstance.accessToken =
-        await PreferenceUtils.getString("access_token");
+    await PreferenceUtils.getString("access_token");
   }
 
   Future getLanguage() async {
     String defaultLan = await PreferenceUtils.getString("default_language");
     LocalUserData.getInstance.defaultLanguage =
-        defaultLan == '' ? 'vi' : defaultLan;
+    defaultLan == '' ? 'vi' : defaultLan;
   }
 
   Future getStation() async {

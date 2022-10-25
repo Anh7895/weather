@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather/isolate.dart';
+import 'package:weather/ui/search/search_screen.dart';
 import 'package:weather/ui/splash/splash_screen.dart';
 
 import '../common/config/routers_name.dart';
@@ -9,6 +10,10 @@ import 'home/home_screen.dart';
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case RouteName.searchScreen:
+        return MaterialPageRoute(
+            builder: (_) => SearchScreen(),
+            settings: const RouteSettings(name: RouteName.searchScreen));
       case RouteName.loginScreen:
         return MaterialPageRoute(
             builder: (_) => HomeScreen(),

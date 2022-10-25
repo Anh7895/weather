@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:weather/bloc/base_state/base_state.dart';
 import 'package:bloc/bloc.dart';
+import 'package:weather/common/multi_language/internationalization.dart';
 import 'package:weather/common/utils/preference_utils.dart';
 import 'package:weather/datasource/data/local_user_data.dart';
 import 'package:weather/datasource/data/model/reponse/home_response.dart';
@@ -21,7 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
 // lấy data ra từ singelton
   HomeResponse? homeResponse = LocalUserData.getInstance.homeResponse;
   HomeResponseCurrent? homeResponseCurrent = LocalUserData.getInstance.homeResponseCurrent;
-
+  ScrollController scrollController = ScrollController();
  /// HomeResponse? homeResponse = HomeResponse();
   //
   // Future<HomeRequest> buildHome(GetDataHomeEvent event) async{
@@ -30,13 +32,13 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
   //       lat: '9.915951',
   //       lon: '105.699334');
   // }
-// save Data Home
-//   saveData(HomeResponse? homeResponse) async{
-//     return await PreferenceUtils.setString('homeResponse', jsonEncode(homeResponse));
-//   }
-  // saveDataCurrent(HomeResponseCurrent? homeResponseCurrent) async{
-  //   return await PreferenceUtils.setString('homeResponseCurrent', jsonEncode(homeResponseCurrent));
-  // }
+//save Data Home
+  saveData(HomeResponse? homeResponse) async{
+    return await PreferenceUtils.setString('homeResponse', jsonEncode(homeResponse));
+  }
+  saveDataCurrent(HomeResponseCurrent? homeResponseCurrent) async{
+    return await PreferenceUtils.setString('homeResponseCurrent', jsonEncode(homeResponseCurrent));
+  }
   // api call function using isolate
 
 /// bỏ try catch để hiện lỗi
@@ -46,22 +48,19 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
     try {
       final response = await homeRepository.getWeather(event.homeRequest);
       homeResponse = response;
-
       /// check homeResponse trả về và response trả về , nếu trả về null, check response trả về khi call api bên data source
       /// homeResponse?.hourlyConverts?[0].clouds?.value.toString(); => print('homeResponse?.hourlyConverts?[0].clouds?.value.toString()');
-      //saveData(homeResponse);
-      //saveDataCurrent(homeResponseCurrent);
+      saveData(homeResponse);
       if (response != null) {
         emit(GetDataHomeState());
       } else {
         emit(ApiErrorState(errorMessage: "Get data detail false"));
       }
+
     } on DioError catch (e) {
+
     } catch (e) {
     }
-
-
-
 
     // //
     // Future<WeatherRequest> buildWeatherRequest(GetWeatherNowEvent event) async {
@@ -72,14 +71,14 @@ class HomeBloc extends Bloc<HomeEvent, BaseState> {
     // }
 
   }
- /// call api 2
+ /// call api HomeCurrentWeather
   Future<void>getHomeCurrentWeather(GetDataCurrentHomeEvent event, Emitter<BaseState> emit) async{
     emit(StartCallApiState());
     try {
       final response = await homeRepository.getCurrentWeather(event.homeCurrentRequest);
       homeResponseCurrent = response;
       print('data: $response');
-      //saveData(homeResponse);
+      saveDataCurrent(homeResponseCurrent);
       if (response != null) {
         emit(GetDataHomeCurrentState());
       } else {

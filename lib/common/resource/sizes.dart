@@ -92,6 +92,9 @@ double height_165 = 165.h;
 double height_600 = 600.h;
 double height_640 = 640.h;
 double height_656 = 656.h;
+double height_180 = 180.h;
+double height_190 = 190.h;
+double height_170 = 170.h;
 double height_1296 = 1296.h;
 
 /// Width
@@ -149,6 +152,7 @@ double width_137 = 137.w;
 double width_165 = 165.w;
 double width_148 = 148.w;
 double width_154 = 154.w;
+double width_170 = 170.w;
 double width_160 = 160.w;
 double width_164 = 164.w;
 double width_168 = 168.w;
